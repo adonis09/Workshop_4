@@ -3,13 +3,24 @@ $(document).ready(function () {
     var $booksList = $('#books-list');
     function loadBooks() {
         $.ajax({
-            url: 'http://localhost:8282/books/',
-            type: 'GET',
-            daraType: 'application/json'
+            url: "http://localhost:8282/books/",
+            type: "GET",
+            daraType: "application/json"
         }).done(function (result) {
             $booksList.empty();
             $.each(result, function (i, book) {
-                $booksList.append("<li data-no='" + book.id + "'>" + '<b>' + book.title + '</b>' + '</li><div></div>');
+                $booksList.append("<li data-no='" + book.id + "'>" + '<b>' + book.title + '</b>' +
+                    "<button id='"+ book.id +"'>delete</button></li><div></div>");
+                $('#' + book.id).on('click',function (del) {
+                    del.stopPropagation();
+                    $.ajax({
+                        url: "http://localhost:8282/books/" + book.id,
+                        method: "DELETE"
+                    }).done(function() {
+                        loadBooks();
+                    })
+
+                })
             });
 
         });
@@ -18,7 +29,7 @@ $(document).ready(function () {
     loadBooks();
 
     var clicksCount = 0;
-    $booksList.on("click", "li", function () {
+    $booksList.on("click", "li", function (event) {
         clicksCount++;
         var clickedLi = $(this);
         $.ajax({
@@ -36,7 +47,6 @@ $(document).ready(function () {
             }else{
                 clickedLi.next().empty();
             }
-
 
         });
 
@@ -63,4 +73,10 @@ $(document).ready(function () {
 
     });
 
+    var delButts = $('.delButtons');
+    delButts.removeClass('delButtons');
+
+
 });
+
+
