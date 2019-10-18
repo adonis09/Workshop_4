@@ -5,8 +5,9 @@ $(document).ready(function () {
         $.ajax({
             url: 'http://localhost:8282/books/',
             type: 'GET',
-            daraType: 'json'
+            daraType: 'application/json'
         }).done(function (result) {
+            $booksList.empty();
             $.each(result, function (i, book) {
                 $booksList.append("<li data-no='" + book.id + "'>" + '<b>' + book.title + '</b>' + '</li><div></div>');
             });
@@ -16,19 +17,26 @@ $(document).ready(function () {
 
     loadBooks();
 
+    var clicksCount = 0;
     $booksList.on("click", "li", function () {
+        clicksCount++;
         var clickedLi = $(this);
         $.ajax({
             url: "http://localhost:8282/books/" + clickedLi.data("no"),
             contentType: "application/json",
             method: "GET"
         }).done(function (result) {
-            clickedLi.next().html(
-                "Author: " + result.author + "<br/>" +
-                "Publisher: " + result.publisher + "<br/>" +
-                "Type: " + result.type + "<br/>" +
-                "ISBN: " + result.isbn + "<br/>" +
-                "ID: " + result.id);
+            if(clicksCount % 2 != 0){
+                clickedLi.next().html(
+                    "Author: " + result.author + "<br/>" +
+                    "Publisher: " + result.publisher + "<br/>" +
+                    "Type: " + result.type + "<br/>" +
+                    "ISBN: " + result.isbn + "<br/>" +
+                    "ID: " + result.id);
+            }else{
+                clickedLi.next().empty();
+            }
+
 
         });
 
@@ -50,7 +58,6 @@ $(document).ready(function () {
             method: "POST"
 
         }).done(function () {
-            console.log("added new book");
             loadBooks();
         });
 
