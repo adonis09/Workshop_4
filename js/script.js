@@ -41,25 +41,27 @@ $(document).ready(function () {
             if (clicksCount % 2 != 0) {
                 clickedLi.next().html(
                     "<form>" +
-                    "    <input id=\"id\" type=\"hidden\" value=" + result.id +
-                    "    ISBN: <input id=\"isbn\" type=\"number\" value=" + result.isbn + "><br>" +
-                    "    Title: <input id=\"title\" type=\"text\" value=" + result.title + "><br>" +
-                    "    Author: <input id=\"author\" type=\"text\" value=" + result.author + "><br>" +
-                    "    Publisher:<input id=\"publisher\" type=\"text\" value=" + result.publisher + "><br>" +
-                    "    Type:<input id=\"type\" type=\"text\" value=" + result.type + "><br>" +
-                    "    <input type=\"submit\" value=\"Update book\" id='u" + result.id + "'>" +
+                    "    <input id=\"update_id\" type=\"hidden\" value=" + result.id +
+                    "    ISBN: <input id=\"update_isbn\" type=\"number\" value=" + result.isbn + "><br>" +
+                    "    Title: <input id=\"update_title\" type=\"text\" value=" + result.title + "><br>" +
+                    "    Author: <input id=\"update_author\" type=\"text\" value=" + result.author + "><br>" +
+                    "    Publisher:<input id=\"update_publisher\" type=\"text\" value=" + result.publisher + "><br>" +
+                    "    Type:<input id=\"update_type\" type=\"text\" value=" + result.type + "><br>" +
+                    "    <input type=\"submit\" value=\"Update book\" id='update" + result.id + "'>" +
                     "</form><br>");
 
-                $('#u' + result.id).on('click', function (update) {
+                $('#update' + result.id).on('click', function (update) {
+
                     console.log("result id: " + result.id);
                     var updateBook = {
-                        "id": $("#id").val(),
-                        "isbn": $("#isbn").val(),
-                        "title": $("#title").val(),
-                        "author": $("#author").val(),
-                        "publisher": $("#publisher").val(),
-                        "type": $("#type").val()
+                        "id": $("#update_id").val(),
+                        "isbn": $("#update_isbn").val(),
+                        "title": $("#update_title").val(),
+                        "author": $("#update_author").val(),
+                        "publisher": $("#update_publisher").val(),
+                        "type": $("#update_type").val()
                     };
+
                     console.log("book object:" + JSON.stringify(updateBook));
                     $.ajax({
                         url: "https://localhost:8282/books/" + result.id,
@@ -67,9 +69,12 @@ $(document).ready(function () {
                         contentType: "application/json",
                         method: "PUT"
                     }).done(function () {
-                        loadBooks();
                         console.log('PUT went well!');
+                        loadBooks();
                     });
+
+                    update.preventDefault();
+
                 })
 
             } else {
@@ -80,16 +85,18 @@ $(document).ready(function () {
 
     });
 
-    var formSubmit = $("#submit");
-    formSubmit.on("click", function () {
+    var formSubmit = $("#create_submit");
+    formSubmit.on("click", function (submit) {
 
         var newBook = {
-            "isbn": $("#isbn").val(),
-            "title": $("#title").val(),
-            "author": $("#author").val(),
-            "publisher": $("#publisher").val(),
-            "type": $("#type").val()
+            "isbn": $("#create_isbn").val(),
+            "title": $("#create_title").val(),
+            "author": $("#create_author").val(),
+            "publisher": $("#create_publisher").val(),
+            "type": $("#create_type").val()
         };
+
+        console.log(newBook);
 
         $.ajax({
             url: "http://localhost:8282/books/",
@@ -99,7 +106,10 @@ $(document).ready(function () {
 
         }).done(function () {
             loadBooks();
+            console.log("POST went well!")
         });
+
+        submit.preventDefault();
 
     });
 
