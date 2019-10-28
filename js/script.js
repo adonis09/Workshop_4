@@ -113,4 +113,31 @@ $(document).ready(function () {
 
     });
 
+    var $testUpdate = $('#test_submit')
+    $testUpdate.on('click', function (testUpdate) {
+
+        var testUpdateBook = {
+            "id": $("#test_id").val(),
+            "isbn": $("#test_isbn").val(),
+            "title": $("#test_title").val(),
+            "author": $("#test_author").val(),
+            "publisher": $("#test_publisher").val(),
+            "type": $("#test_type").val()
+        };
+
+        console.log("testUpdateBook object:" + JSON.stringify(testUpdateBook));
+        $.ajax({
+            url: "https://localhost:8282/books/" + testUpdateBook.id,
+            data: JSON.stringify(testUpdateBook),
+            contentType: "application/json",
+            method: "PUT"
+        }).done(function () {
+            console.log('PUT went well!');
+            loadBooks();
+        });
+
+        testUpdate.preventDefault();
+
+    })
+
 });
