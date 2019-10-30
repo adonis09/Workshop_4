@@ -41,12 +41,12 @@ $(document).ready(function () {
             if (clicksCount % 2 != 0) {
                 clickedLi.next().html(
                     "<form>" +
-                    "    <input id=\"update_id\" type=\"hidden\" value=" + result.id +
-                    "    ISBN: <input id=\"update_isbn\" type=\"number\" value=" + result.isbn + "><br>" +
-                    "    Title: <input id=\"update_title\" type=\"text\" value=" + result.title + "><br>" +
-                    "    Author: <input id=\"update_author\" type=\"text\" value=" + result.author + "><br>" +
-                    "    Publisher:<input id=\"update_publisher\" type=\"text\" value=" + result.publisher + "><br>" +
-                    "    Type:<input id=\"update_type\" type=\"text\" value=" + result.type + "><br>" +
+                    "    <input id=\"update_id\" type=\"hidden\" value=\"" + result.id + "\">" +
+                    "    ISBN: <input id=\"update_isbn\" type=\"number\" value=\"" + result.isbn + "\"><br>" +
+                    "    Title: <input id=\"update_title\" type=\"text\" value=\"" + result.title + "\"><br>" +
+                    "    Author: <input id=\"update_author\" type=\"text\" value=\"" + result.author + "\"><br>" +
+                    "    Publisher:<input id=\"update_publisher\" type=\"text\" value=\"" + result.publisher + "\"><br>" +
+                    "    Type:<input id=\"update_type\" type=\"text\" value=\"" + result.type + "\"><br>" +
                     "    <input type=\"submit\" value=\"Update book\" id='update" + result.id + "'>" +
                     "</form><br>");
 
@@ -64,7 +64,7 @@ $(document).ready(function () {
 
                     console.log("book object:" + JSON.stringify(updateBook));
                     $.ajax({
-                        url: "https://localhost:8282/books/" + result.id,
+                        url: "http://localhost:8282/books/" + result.id,
                         data: JSON.stringify(updateBook),
                         contentType: "application/json",
                         method: "PUT"
@@ -112,32 +112,5 @@ $(document).ready(function () {
         submit.preventDefault();
 
     });
-
-    var $testUpdate = $('#test_submit')
-    $testUpdate.on('click', function (testUpdate) {
-
-        var testUpdateBook = {
-            "id": $("#test_id").val(),
-            "isbn": $("#test_isbn").val(),
-            "title": $("#test_title").val(),
-            "author": $("#test_author").val(),
-            "publisher": $("#test_publisher").val(),
-            "type": $("#test_type").val()
-        };
-
-        console.log("testUpdateBook object:" + JSON.stringify(testUpdateBook));
-        $.ajax({
-            url: "https://localhost:8282/books/" + testUpdateBook.id,
-            data: JSON.stringify(testUpdateBook),
-            contentType: "application/json",
-            method: "PUT"
-        }).done(function () {
-            console.log('PUT went well!');
-            loadBooks();
-        });
-
-        testUpdate.preventDefault();
-
-    })
 
 });
